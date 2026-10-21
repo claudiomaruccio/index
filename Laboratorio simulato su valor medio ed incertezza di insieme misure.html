@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisica Lab: Misura del Tempo ed Errore di Misura - Prof. Claudio Maruccio</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Formule: renderer locale HTML/Unicode, senza dipendenze KaTeX -->
+
+  <style>
+    /* PhET Colorado Palette & Styling */
+    body {
+      background-color: #dbeeff;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+      color: #1e293b;
+    }
+    
+    .phet-header {
+      background: linear-gradient(135deg, #184c78 0%, #0284c7 100%);
+    }
+
+    .phet-card {
+      background-color: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .phet-btn-orange {
+      background-color: #f48024;
+      color: white;
+      font-weight: 700;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 0 #c25e0e;
+      transition: all 0.1s ease;
+    }
+    .phet-btn-orange:hover {
+      background-color: #e27117;
+      transform: translateY(-1px);
+    }
+    .phet-btn-orange:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #c25e0e;
+    }
+
+    .phet-btn-blue {
+      background-color: #184c78;
+      color: white;
+      font-weight: 700;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 0 #0f314f;
+      transition: all 0.1s ease;
+    }
+    .phet-btn-blue:hover {
+      background-color: #0f314f;
+      transform: translateY(-1px);
+    }
+    .phet-btn-blue:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0f314f;
+    }
+
+    .phet-btn-green {
+      background-color: #227841;
+      color: white;
+      font-weight: 700;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 0 #154c29;
+      transition: all 0.1s ease;
+    }
+    .phet-btn-green:hover {
+      background-color: #1b6134;
+      transform: translateY(-1px);
+    }
+    .phet-btn-green:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #154c29;
+    }
+
+    .tab-btn {
+      transition: all 0.2s ease;
+      border-top-left-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+    }
+
+    .tab-active {
+      background-color: #ffffff !important;
+      color: #f48024 !important;
+      font-weight: 800;
+      border-top: 4px solid #f48024;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    }
+
+    /* Strict responsive LaTeX formatting rules */
+    .katex-container {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      box-sizing: border-box !important;
+      height: auto !important;
+      padding: 0.4rem 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    .katex-display {
+      margin: 0.3em 0 !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      box-sizing: border-box !important;
+      overflow-y: hidden !important;
+    }
+    .math-html { font-family: "Cambria Math", "STIX Two Math", serif; }
+    .math-html .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 .12em; }
+    .math-html .frac > span:first-child { border-bottom: 1px solid currentColor; padding: 0 .18em .08em; }
+    .math-html .frac > span:last-child { padding: .08em .18em 0; }
+    .math-html sup, .math-html sub { font-size: .75em; line-height: 0; }
+    .math-html.display { display: block; text-align: center; margin: .35em 0; overflow-x: auto; }
+
+    /* Desk Tap Ripple Animation */
+    @keyframes tapRipple {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .tap-effect {
+      position: absolute;
+      border: 4px solid #f48024;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: tapRipple 0.5s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- MAIN HEADER -->
+  <header class="phet-header text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="bg-amber-500 text-white p-3 rounded-2xl shadow-inner text-2xl font-bold">
+          <i class="fas fa-stopwatch"></i>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">MISURA DEL TEMPO ED ERRORE DI MISURA</h1>
+          <p class="text-xs md:text-sm text-sky-200">ITT Panetti Pitagora — Prof. Claudio Maruccio (Fisica Primo Anno)</p>
+        </div>
+      </div>
+
+      <!-- GLOBAL CONTROLS -->
+      <div class="flex items-center space-x-3">
+        <button id="sound-toggle-btn" onclick="toggleSound()" class="bg-sky-900 hover:bg-sky-800 px-4 py-2 rounded-xl text-sm font-bold flex items-center transition">
+          <i id="sound-icon" class="fas fa-volume-up text-emerald-400 me-2"></i>
+          <span id="sound-text">Audio ON</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- NAVIGATION TABS -->
+    <div class="max-w-7xl mx-auto px-4 mt-2">
+      <div class="flex overflow-x-auto space-x-2 no-scrollbar text-sm font-semibold text-slate-200">
+        <button id="btn-tempo" onclick="switchTab('tempo')" class="tab-btn tab-active px-5 py-3 bg-sky-900 hover:bg-sky-800">
+          <i class="fas fa-stopwatch me-2"></i>1. Esperimento Tempo
+        </button>
+        <button id="btn-uva" onclick="switchTab('uva')" class="tab-btn px-5 py-3 bg-sky-900 hover:bg-sky-800">
+          <i class="fas fa-wine-berry me-2"></i>2. Metafora Grappoli
+        </button>
+        <button id="btn-bilancia" onclick="switchTab('bilancia')" class="tab-btn px-5 py-3 bg-sky-900 hover:bg-sky-800">
+          <i class="fas fa-balance-scale me-2"></i>3. Bilancia & Esercizio
+        </button>
+        <button id="btn-quiz" onclick="switchTab('quiz')" class="tab-btn px-5 py-3 bg-sky-900 hover:bg-sky-800">
+          <i class="fas fa-tasks me-2"></i>4. Quiz Autovalutazione
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-grow">
+
+    <!-- ==================== TAB 1: ESPERIMENTO DEL TEMPO ==================== -->
+    <section id="tab-tempo" class="space-y-6">
+      
+      <!-- TOP ROW: DESK SIMULATOR + GRAPH CANVAS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- DESK TAP SIMULATOR CARD -->
+        <div class="phet-card p-6 lg:col-span-5 flex flex-col justify-between items-center text-center relative overflow-hidden">
+          <div class="w-full">
+            <h2 class="text-lg font-bold text-slate-800 mb-1">
+              <i class="fas fa-hand-sparkles text-amber-600 me-2"></i>Banco del Docente & Cronometro
+            </h2>
+            <p class="text-xs text-slate-500 mb-3">Sensibilità dello strumento: $\Delta T_{\text{sens}} = 0{,}01\text{ s}$</p>
+          </div>
+
+          <!-- DESK TAP VISUALIZER -->
+          <div id="desk-area" class="relative w-full h-28 bg-gradient-to-b from-amber-700 to-amber-900 rounded-2xl border-4 border-amber-950 flex flex-col items-center justify-center cursor-pointer shadow-inner my-2 group transition transform active:scale-98" onclick="handleDeskTap()">
+            <div id="desk-ripple-container" class="absolute inset-0 overflow-hidden rounded-xl pointer-events-none"></div>
+            <i class="fas fa-hammer text-amber-200 text-3xl mb-1 group-hover:bounce"></i>
+            <span class="text-xs font-extrabold text-amber-100 tracking-wide uppercase">Batti un Colpo sul Banco!</span>
+            <span id="tap-status-badge" class="mt-1 text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full border border-amber-700">Primo colpo avvia timer — Secondo colpo arresta</span>
+          </div>
+          
+          <!-- STOPWATCH DISPLAY -->
+          <div class="bg-slate-900 text-emerald-400 font-mono text-3xl md:text-4xl tracking-widest px-6 py-3 rounded-2xl border-4 border-slate-700 shadow-inner my-2 w-full">
+            <span id="stopwatch-display">10,86 s</span>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="flex flex-wrap gap-2 justify-center w-full mt-2">
+            <button id="sw-start-btn" onclick="toggleStopwatch()" class="phet-btn-orange px-3 py-2 text-xs flex-1">
+              <i class="fas fa-play me-1"></i> Start/Stop
+            </button>
+            <button onclick="resetStopwatch()" class="phet-btn-blue px-3 py-2 text-xs">
+              <i class="fas fa-redo me-1"></i> Reset
+            </button>
+            <button onclick="simulareMisuraMaruccio()" class="phet-btn-green px-3 py-2 text-xs w-full mt-1">
+              <i class="fas fa-plus-circle me-1"></i> Aggiungi Nuova Misura al Set
+            </button>
+          </div>
+        </div>
+
+        <!-- TIMELINE GRAPH CANVAS -->
+        <div class="phet-card p-6 lg:col-span-7 flex flex-col justify-between">
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="text-lg font-bold text-slate-800">
+              <i class="fas fa-chart-line text-sky-700 me-2"></i>Rappresentazione Grafica del Set Misure
+            </h2>
+            <span class="text-xs bg-sky-100 text-sky-800 font-bold px-3 py-1 rounded-full border border-sky-300">
+              $T = (\bar{T} \pm E_a)\text{ s}$
+            </span>
+          </div>
+
+          <div class="relative w-full h-56 bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+            <canvas id="timelineCanvas" class="w-full h-full block"></canvas>
+          </div>
+
+          <!-- QUICK STATS BADGES -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 text-center text-xs">
+            <div class="p-2 bg-blue-50 rounded-lg border border-blue-200">
+              <span class="block text-slate-500 font-semibold">Misure ($N$)</span>
+              <strong id="stat-n" class="text-base text-blue-800">7</strong>
+            </div>
+            <div class="p-2 bg-red-50 rounded-lg border border-red-200">
+              <span class="block text-slate-500 font-semibold">Media ($\bar{T}$)</span>
+              <strong id="stat-mean" class="text-base text-red-700">10,86 s</strong>
+            </div>
+            <div class="p-2 bg-orange-50 rounded-lg border border-orange-200">
+              <span class="block text-slate-500 font-semibold">Incertezza ($E_a$)</span>
+              <strong id="stat-ea" class="text-base text-orange-700">0,16 s</strong>
+            </div>
+            <div class="p-2 bg-emerald-50 rounded-lg border border-emerald-200">
+              <span class="block text-slate-500 font-semibold">Errore $\%$</span>
+              <strong id="stat-ep" class="text-base text-emerald-700">1,5 %</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIDDLE ROW: INTERACTIVE DATA TABLE -->
+      <div class="phet-card p-6">
+        <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
+          <div>
+            <h3 class="font-bold text-slate-800 text-base">
+              <i class="fas fa-table text-sky-700 me-2"></i>1. Set delle Misure Valide Selezionate ($N = 7$)
+            </h3>
+            <p class="text-xs text-slate-500">I dati originali dalla scheda del docente Prof. Claudio Maruccio (ITT Panetti Pitagora)</p>
+          </div>
+          
+          <button onclick="resetTimeData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 font-bold transition">
+            <i class="fas fa-undo me-1"></i>Ripristina 7 Misure Scheda
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-center border-collapse">
+            <thead>
+              <tr class="bg-sky-900 text-white border-b-2 border-sky-950">
+                <th class="p-2.5 font-bold">Misura</th>
+                <th class="p-2.5 font-bold">$T_1$</th>
+                <th class="p-2.5 font-bold">$T_2$</th>
+                <th class="p-2.5 font-bold">$T_3$</th>
+                <th class="p-2.5 font-bold">$T_4$</th>
+                <th class="p-2.5 font-bold">$T_5$</th>
+                <th class="p-2.5 font-bold">$T_6$</th>
+                <th class="p-2.5 font-bold">$T_7$</th>
+                <th class="p-2.5 font-bold">Azioni</th>
+              </tr>
+            </thead>
+            <tbody id="time-table-horizontal-body" class="divide-y divide-slate-200 bg-slate-50">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3 flex justify-between items-center text-xs text-slate-600">
+          <span>Minimo: <strong id="val-min" class="text-slate-900 font-mono">10,68 s</strong> | Massimo: <strong id="val-max" class="text-slate-900 font-mono">10,99 s</strong></span>
+          <button onclick="addTimeRow()" class="phet-btn-blue text-xs px-3 py-1.5">
+            <i class="fas fa-plus me-1"></i>Aggiungi Misura
+          </button>
+        </div>
+      </div>
+
+      <!-- BOTTOM ROW: SEQUENTIAL SINGLE-COLUMN CALCULATION STEPS (FIX FOR LATEX OVERFLOW) -->
+      <div class="phet-card p-6 space-y-6">
+        <div class="border-b border-slate-200 pb-3">
+          <h3 class="font-extrabold text-slate-800 text-lg flex items-center">
+            <i class="fas fa-calculator text-orange-500 me-2"></i>Svolgimento e Calcoli Guidati (Passo dopo Passo)
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Struttura sequenziale a colonna unica per un'ottimale visualizzazione matematica</p>
+        </div>
+
+        <!-- STEP 1: SOMMA E MEDIA -->
+        <div class="p-5 bg-sky-50 rounded-2xl border border-sky-200 space-y-3">
+          <div class="flex items-center space-x-2">
+            <span class="bg-sky-800 text-white text-xs font-bold px-2.5 py-1 rounded-lg">PASSO 1</span>
+            <h4 class="font-bold text-sky-950 text-base">Calcolo della Somma e del Valore Medio ($\bar{T}$)</h4>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            Per trovare la stima più affidabile della misura, sommiamo tutti i tempi presi e dividiamo per il numero totale di misure ($N = 7$):
+          </p>
+          
+          <div class="katex-container bg-white p-4 rounded-xl border border-sky-200 shadow-sm">
+            <div id="katex-step1-somma"></div>
+          </div>
+        </div>
+
+        <!-- STEP 2: ARROTONDAMENTO E CIFRE SIGNIFICATIVE -->
+        <div class="p-5 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
+          <div class="flex items-center space-x-2">
+            <span class="bg-amber-600 text-white text-xs font-bold px-2.5 py-1 rounded-lg">PASSO 2</span>
+            <h4 class="font-bold text-amber-950 text-base">Arrotondamento per Cifre Significative</h4>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            Il nostro cronometro misura i <strong>centesimi di secondo</strong> ($0{,}01\text{ s}$), ovvero 2 cifre decimali dopo la virgola. La terza cifra decimale della media grezza $10{,}85\mathbf{8}...$ è $8 \ge 5$, quindi arrotondiamo per eccesso (+1 sulla cifra precedente):
+          </p>
+          
+          <div class="katex-container bg-white p-4 rounded-xl border border-amber-200 shadow-sm">
+            <div id="katex-step2-arrotondamento"></div>
+          </div>
+        </div>
+
+        <!-- STEP 3: CALCOLO DEGLI ERRORI -->
+        <div class="p-5 bg-purple-50 rounded-2xl border border-purple-200 space-y-3">
+          <div class="flex items-center space-x-2">
+            <span class="bg-purple-800 text-white text-xs font-bold px-2.5 py-1 rounded-lg">PASSO 3</span>
+            <h4 class="font-bold text-purple-950 text-base">Calcolo degli Errori: $E_a$, $E_r$, ed $E_\%$</h4>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+            <!-- Ea -->
+            <div class="bg-white p-4 rounded-xl border border-purple-200 shadow-sm space-y-2">
+              <h5 class="font-bold text-purple-900 text-xs uppercase tracking-wider">1. Errore Assoluto ($E_a$)</h5>
+              <p class="text-[11px] text-slate-600">Semidispersione massima (metà della differenza tra $T_{\text{max}}$ e $T_{\text{min}}$):</p>
+              <div class="katex-container" id="katex-step3-ea"></div>
+            </div>
+
+            <!-- Er -->
+            <div class="bg-white p-4 rounded-xl border border-purple-200 shadow-sm space-y-2">
+              <h5 class="font-bold text-purple-900 text-xs uppercase tracking-wider">2. Errore Relativo ($E_r$)</h5>
+              <p class="text-[11px] text-slate-600">Rapporto adimensionale tra errore assoluto e valore medio:</p>
+              <div class="katex-container" id="katex-step3-er"></div>
+            </div>
+
+            <!-- Ep -->
+            <div class="bg-white p-4 rounded-xl border border-purple-200 shadow-sm space-y-2">
+              <h5 class="font-bold text-purple-900 text-xs uppercase tracking-wider">3. Errore Percentuale ($E_\%$)</h5>
+              <p class="text-[11px] text-slate-600">Precisione percentuale della misura:</p>
+              <div class="katex-container" id="katex-step3-ep"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: SCRITTURA FINALE -->
+        <div class="p-5 bg-emerald-50 rounded-2xl border border-emerald-300 text-center space-y-2">
+          <div class="flex items-center justify-center space-x-2">
+            <span class="bg-emerald-700 text-white text-xs font-bold px-2.5 py-1 rounded-lg">PASSO 4</span>
+            <h4 class="font-bold text-emerald-950 text-base">Scrittura Finale del Risultato Standard</h4>
+          </div>
+          
+          <div class="katex-container bg-white p-4 rounded-xl border border-emerald-300 shadow-sm my-2">
+            <div id="katex-step4-risultato"></div>
+          </div>
+
+          <p class="text-xs text-emerald-900 font-semibold">
+            L'intervallo delle misure attendibili si estende da $T_{\text{min}} = 10{,}70\text{ s}$ a $T_{\text{max}} = 11{,}02\text{ s}$.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: METAFORA DEI GRAPPOLI D'UVA ==================== -->
+    <section id="tab-uva" class="hidden space-y-6">
+      
+      <div class="phet-card p-6">
+        <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">
+              <i class="fas fa-wine-berry text-purple-600 me-2"></i>Metafora Visiva: "Raccogli e Livella"
+            </h2>
+            <p class="text-xs md:text-sm text-slate-600">Visualizzare la Media, l'Incertezza e l'Errore Relativo con i grappoli d'uva</p>
+          </div>
+
+          <!-- PHASE SELECTOR BUTTONS -->
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setGrapePhase(1)" id="gphase-btn-1" class="phet-btn-orange px-3 py-2 text-xs">
+              1. Stacca e Raccogli
+            </button>
+            <button onclick="setGrapePhase(2)" id="gphase-btn-2" class="phet-btn-blue px-3 py-2 text-xs">
+              2. Livella (Media)
+            </button>
+            <button onclick="setGrapePhase(3)" id="gphase-btn-3" class="phet-btn-blue px-3 py-2 text-xs">
+              3. Incertezza ($E_a$)
+            </button>
+            <button onclick="setGrapePhase(4)" id="gphase-btn-4" class="phet-btn-blue px-3 py-2 text-xs">
+              4. Perché l'Errore Relativo?
+            </button>
+          </div>
+        </div>
+
+        <!-- CANVAS SIMULATOR -->
+        <div class="relative w-full h-80 bg-gradient-to-b from-sky-50 to-amber-50 rounded-2xl border-2 border-slate-300 overflow-hidden shadow-inner">
+          <canvas id="grapeCanvas" class="w-full h-full block"></canvas>
+        </div>
+
+        <!-- EXPLANATION CARD FOR ACTIVE PHASE -->
+        <div id="grape-explanation-box" class="mt-6 p-5 bg-purple-50 rounded-2xl border border-purple-200">
+          <!-- Dynamic text and KaTeX formulas populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: BILANCIA DIGITALE & ESERCIZIO ==================== -->
+    <section id="tab-bilancia" class="hidden space-y-6">
+      
+      <div class="phet-card p-6">
+        <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">
+              <i class="fas fa-balance-scale text-emerald-700 me-2"></i>Esercizio Assegnato: Misura della Massa di un Chiodo
+            </h2>
+            <p class="text-xs md:text-sm text-slate-600">Bilancia digitale con sensibilità al milligrammo ($\Delta m_{\text{sens}} = 0{,}001\text{ g}$)</p>
+          </div>
+
+          <button onclick="resetNailData()" class="phet-btn-blue text-xs px-4 py-2">
+            <i class="fas fa-redo me-1"></i>Ripristina Dati Chiodo
+          </button>
+        </div>
+
+        <!-- SENSITIVITY SELECTOR -->
+        <div class="p-4 bg-slate-100 rounded-xl mb-6 flex flex-wrap items-center justify-between gap-4 border border-slate-200">
+          <span class="text-xs md:text-sm font-bold text-slate-800">
+            <i class="fas fa-sliders-h text-orange-500 me-2"></i>Cambia Sensibilità della Bilancia Digitale:
+          </span>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setSensitivity(0.001)" id="sens-btn-0001" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-orange-500 text-white shadow">
+              0,001 g (Milligrammo)
+            </button>
+            <button onclick="setSensitivity(0.01)" id="sens-btn-001" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+              0,01 g (Centesimo)
+            </button>
+            <button onclick="setSensitivity(0.1)" id="sens-btn-01" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+              0,1 g (Decimo)
+            </button>
+            <button onclick="setSensitivity(1.0)" id="sens-btn-1" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+              1 g (Grammo)
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- INPUT DATA TABLE -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm">
+              <h3 class="font-bold text-slate-800 text-sm mb-3">
+                <i class="fas fa-weight-hanging text-emerald-600 me-2"></i>Misure Effettuate ($N = 4$)
+              </h3>
+              
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-emerald-800 text-white border-b border-emerald-950">
+                      <th class="p-2 text-center">Simbolo</th>
+                      <th class="p-2">Massa $m_i$ (g)</th>
+                      <th class="p-2 text-center">Azione</th>
+                    </tr>
+                  </thead>
+                  <tbody id="nail-table-body" class="divide-y divide-slate-100">
+                    <!-- Dynamic rows -->
+                  </tbody>
+                </table>
+              </div>
+
+              <button onclick="addNailRow()" class="w-full mt-3 phet-btn-green py-2 text-xs">
+                <i class="fas fa-plus me-1"></i>Aggiungi Misura
+              </button>
+            </div>
+          </div>
+
+          <!-- DYNAMIC KATEX CALCULATIONS -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="p-5 bg-gradient-to-br from-slate-50 to-emerald-50 rounded-xl border border-emerald-200">
+              <h3 class="font-bold text-slate-800 text-sm mb-3 border-b border-emerald-200 pb-2">
+                <i class="fas fa-square-root-variable text-emerald-700 me-2"></i>Risultati Calcolati Dinamicamente
+              </h3>
+
+              <div id="sandbox-calc-output" class="space-y-3">
+                <!-- Calculated formulas populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION GUIDED SOLUTION -->
+        <div class="mt-6 border border-slate-200 rounded-xl overflow-hidden">
+          <button onclick="toggleAccordion()" class="w-full p-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm flex justify-between items-center transition">
+            <span><i class="fas fa-lightbulb text-amber-500 me-2"></i>Mostra / Nascondi Soluzione Guidata Ufficiale Scheda</span>
+            <i id="accordion-icon" class="fas fa-chevron-down"></i>
+          </button>
+          
+          <div id="accordion-content" class="hidden p-6 bg-white space-y-4 text-sm text-slate-700">
+            <p class="font-bold text-slate-900">Svolgimento per la massa del chiodo ($m_1=10{,}834\text{ g}, m_2=10{,}951\text{ g}, m_3=11{,}004\text{ g}, m_4=10{,}987\text{ g}$):</p>
+            <ol class="list-decimal pl-5 space-y-3">
+              <li>
+                <strong>Massa Media ($\bar{m}$):</strong>
+                $$\text{Somma} = 10{,}834 + 10{,}951 + 11{,}004 + 10{,}987 = 43{,}776\text{ g}$$
+                $$\bar{m} = \frac{43{,}776}{4} = 10{,}944\text{ g}$$
+              </li>
+              <li>
+                <strong>Errore Assoluto ($E_a$):</strong>
+                $$m_{\text{max}} = 11{,}004\text{ g}, \quad m_{\text{min}} = 10{,}834\text{ g}$$
+                $$E_a = \frac{11{,}004 - 10{,}834}{2} = \frac{0{,}170}{2} = 0{,}085\text{ g}$$
+              </li>
+              <li>
+                <strong>Errore Relativo ($E_r$) e Percentuale ($E_\%$):</strong>
+                $$E_r = \frac{0{,}085}{10{,}944} \approx 0{,}007766 \to 0{,}0078$$
+                $$E_\% = 0{,}0078 \times 100\% = 0{,}78\%$$
+              </li>
+              <li>
+                <strong>Scrittura Finale del Risultato:</strong>
+                $$\mathbf{m = (10{,}944 \pm 0{,}085)\text{ g}}$$
+              </li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: QUIZ INTERATTIVO ==================== -->
+    <section id="tab-quiz" class="hidden space-y-6">
+      <div class="phet-card p-6">
+        <div class="flex flex-wrap justify-between items-center mb-6 gap-4 border-b border-slate-200 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">
+              <i class="fas fa-graduation-cap text-orange-500 me-2"></i>Quiz Interattivo di Autovalutazione
+            </h2>
+            <p class="text-xs md:text-sm text-slate-600">Verifica la tua preparazione su Valore Medio, Cifre Significative ed Errori</p>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <div class="bg-orange-100 border border-orange-300 text-orange-950 px-4 py-2 rounded-xl text-sm font-bold">
+              Punteggio: <span id="quiz-score" class="text-lg">0</span> / 5
+            </div>
+            <button onclick="restartQuiz()" class="phet-btn-blue text-xs px-3 py-2">
+              <i class="fas fa-redo me-1"></i>Ricomincia
+            </button>
+          </div>
+        </div>
+
+        <!-- QUIZ QUESTIONS CONTAINER -->
+        <div id="quiz-container" class="space-y-6">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-800 text-slate-400 py-4 text-center text-xs">
+    <p>Simulazione Didattica di Fisica — PhET Style | ITT Panetti Pitagora — Prof. Claudio Maruccio</p>
+    <p class="mt-1 text-slate-500">Formule matematiche HTML senza librerie esterne | Web Audio Synthesizer</p>
+  </footer>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    /* ==========================================================================
+       1. GLOBAL STATE & KATEX AUTO-RENDER HELPER
+       ========================================================================== */
+    let isMuted = false;
+    let audioCtx = null;
+
+    // Renderer matematico locale: non carica librerie esterne.
+    // Supporta le notazioni usate nel laboratorio: frazioni, pedici, apici e simboli comuni.
+    function latexToHtml(src) {
+      let x = String(src)
+        .replace(/\\begin\{aligned\}|\\end\{aligned\}/g, '')
+        .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
+        .replace(/\\mathrm\s*\{([^{}]*)\}/g, '$1')
+        .replace(/\\mathbf\s*\{([^{}]*)\}/g, '<strong>$1</strong>')
+        .replace(/\\quad/g, '&nbsp;&nbsp;&nbsp;')
+        .replace(/\\,|\\;/g, ' ')
+        .replace(/\\%/g, '%')
+        .replace(/\\Delta/g, 'Δ').replace(/\\sigma/g, 'σ').replace(/\\sum/g, '∑')
+        .replace(/\\bar\s*\{([^{}]*)\}/g, '<span style="text-decoration:overline">$1</span>')
+        .replace(/\\sqrt\s*\{([^{}]*)\}/g, '√<span class="radicand">($1)</span>')
+        .replace(/\\implies|\\Rightarrow/g, '⇒').replace(/\\approx/g, '≈')
+        .replace(/\\pm/g, '±').replace(/\\times/g, '×').replace(/\\cdot/g, '·')
+        .replace(/\\to/g, '→').replace(/\\xrightarrow\s*\{([^{}]*)\}/g, '→<sup>$1</sup>')
+        .replace(/\\text\s*\{([^{}]*)\}/g, '$1')
+        .replace(/\\left|\\right/g, '')
+        .replace(/\\,/g, ' ');
+      // Fractions semplici e annidate, iterate finché possibile.
+      for (let i=0; i<12; i++) {
+        const before=x;
+        x=x.replace(/\\frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '<span class="frac"><span>$1</span><span>$2</span></span>');
+        if (x===before) break;
+      }
+      x=x.replace(/\\sum/g,'∑').replace(/\\infty/g,'∞').replace(/\\text/g,'');
+      // Converte pedici e apici con gruppi semplici.
+      x=x.replace(/_\{([^{}]*)\}/g,'<sub>$1</sub>').replace(/\^\{([^{}]*)\}/g,'<sup>$1</sup>');
+      x=x.replace(/_([A-Za-z0-9])/g,'<sub>$1</sub>').replace(/\^([A-Za-z0-9])/g,'<sup>$1</sup>');
+      x=x.replace(/\\\\/g,'<br>').replace(/\\\[0\.5em\]/g,'<br>');
+      x=x.replace(/[{}]/g,'');
+      return x;
+    }
+
+    function renderKaTeX(container) {
+      const target = container || document.body;
+      if (!target) return;
+      const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue || !/\$\$|\\\(|\\\[/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+          const parent = node.parentElement;
+          if (parent && /^(SCRIPT|STYLE|TEXTAREA|PRE|CODE)$/i.test(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node => {
+        const text=node.nodeValue;
+        const re=/\$\$([\s\S]+?)\$\$|\\\[([\s\S]+?)\\\]|\\\(([\s\S]+?)\\\)|\$([^$\n]+)\$/g;
+        let match, last=0, changed=false;
+        const frag=document.createDocumentFragment();
+        while((match=re.exec(text))!==null){
+          if(match.index>last) frag.appendChild(document.createTextNode(text.slice(last,match.index)));
+          const raw=match[1]??match[2]??match[3]??match[4];
+          const display=match[1]!==undefined||match[2]!==undefined;
+          const span=document.createElement('span');
+          span.className='math-html'+(display?' display':'');
+          span.innerHTML=latexToHtml(raw);
+          frag.appendChild(span); last=re.lastIndex; changed=true;
+        }
+        if(changed){ if(last<text.length) frag.appendChild(document.createTextNode(text.slice(last))); node.parentNode.replaceChild(frag,node); }
+      });
+    }
+
+    /* ==========================================================================
+       AUDIO SYNTHESIZER (WEB AUDIO API)
+       ========================================================================== */
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleSound() {
+      isMuted = !isMuted;
+      const icon = document.getElementById('sound-icon');
+      const text = document.getElementById('sound-text');
+      if (isMuted) {
+        icon.className = 'fas me-2 fa-volume-mute text-red-400';
+        text.innerText = 'Audio OFF';
+      } else {
+        icon.className = 'fas me-2 fa-volume-up text-emerald-400';
+        text.innerText = 'Audio ON';
+        playClick();
+      }
+    }
+
+    function playTone(freq, duration, type='sine', volume=0.15) {
+      if (isMuted) return;
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playClick() { playTone(580, 0.05, 'sine', 0.1); }
+    function playTick() { playTone(880, 0.02, 'square', 0.05); }
+    function playDeskTapSound() {
+      playTone(180, 0.12, 'triangle', 0.3);
+      setTimeout(() => playTone(110, 0.15, 'sine', 0.2), 30);
+    }
+    function playSuccess() {
+      if (isMuted) return;
+      playTone(523.25, 0.08, 'sine');
+      setTimeout(() => playTone(659.25, 0.08, 'sine'), 90);
+      setTimeout(() => playTone(783.99, 0.18, 'sine'), 180);
+    }
+    function playWrong() {
+      playTone(180, 0.25, 'sawtooth', 0.2);
+    }
+
+    // TAB SWITCHER
+    function switchTab(tabId) {
+      playClick();
+      ['tempo', 'uva', 'bilancia', 'quiz'].forEach(id => {
+        document.getElementById('tab-' + id).classList.add('hidden');
+        document.getElementById('btn-' + id).classList.remove('tab-active');
+        document.getElementById('btn-' + id).classList.add('bg-sky-900', 'text-slate-200');
+      });
+
+      const activeTab = document.getElementById('tab-' + tabId);
+      const activeBtn = document.getElementById('btn-' + tabId);
+      
+      activeTab.classList.remove('hidden');
+      activeBtn.classList.add('tab-active');
+      activeBtn.classList.remove('bg-sky-900', 'text-slate-200');
+
+      if (tabId === 'tempo') {
+        drawTimePlot();
+      } else if (tabId === 'uva') {
+        drawGrapesPhase();
+      }
+
+      setTimeout(() => renderKaTeX(activeTab), 40);
+    }
+
+    /* ==========================================================================
+       2. TAB 1: ESPERIMENTO DEL TEMPO (SCHEDA MARUCCIO)
+       ========================================================================== */
+    let timeData = [10.93, 10.95, 10.72, 10.99, 10.93, 10.68, 10.81];
+    let swRunning = false;
+    let swInterval = null;
+    let swTime = 10.86;
+    let deskTapState = 0; // 0 = ready, 1 = timing
+
+    function handleDeskTap() {
+      playDeskTapSound();
+      
+      // Create visual ripple
+      const container = document.getElementById('desk-ripple-container');
+      const ripple = document.createElement('div');
+      ripple.className = 'tap-effect';
+      ripple.style.left = '50%';
+      ripple.style.top = '50%';
+      ripple.style.width = '100px';
+      ripple.style.height = '100px';
+      ripple.style.marginLeft = '-50px';
+      ripple.style.marginTop = '-50px';
+      container.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 500);
+
+      const badge = document.getElementById('tap-status-badge');
+
+      if (deskTapState === 0) {
+        deskTapState = 1;
+        swTime = 0.0;
+        swRunning = true;
+        badge.innerText = 'Timer in corso! Batti di nuovo per fermare...';
+        badge.className = 'mt-1 text-[10px] bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-600 animate-pulse';
+        clearInterval(swInterval);
+        swInterval = setInterval(() => {
+          swTime += 0.01;
+          document.getElementById('stopwatch-display').innerText = swTime.toFixed(2).replace('.', ',') + ' s';
+          playTick();
+        }, 10);
+      } else {
+        deskTapState = 0;
+        swRunning = false;
+        clearInterval(swInterval);
+        badge.innerText = 'Misura completata: ' + swTime.toFixed(2).replace('.', ',') + ' s';
+        badge.className = 'mt-1 text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full border border-amber-700';
+      }
+    }
+
+    function toggleStopwatch() {
+      initAudio();
+      const btn = document.getElementById('sw-start-btn');
+      if (swRunning) {
+        clearInterval(swInterval);
+        swRunning = false;
+        btn.innerHTML = '<i class="fas fa-play me-1"></i> Start';
+        playClick();
+      } else {
+        swRunning = true;
+        btn.innerHTML = '<i class="fas fa-pause me-1"></i> Pause';
+        swInterval = setInterval(() => {
+          swTime += 0.01;
+          document.getElementById('stopwatch-display').innerText = swTime.toFixed(2).replace('.', ',') + ' s';
+          playTick();
+        }, 10);
+      }
+    }
+
+    function resetStopwatch() {
+      if (swRunning) toggleStopwatch();
+      swTime = 0.0;
+      deskTapState = 0;
+      document.getElementById('stopwatch-display').innerText = '0,00 s';
+      document.getElementById('tap-status-badge').innerText = 'Primo colpo avvia timer — Secondo colpo arresta';
+      playClick();
+    }
+
+    function simulareMisuraMaruccio() {
+      playClick();
+      const randVal = parseFloat((10.65 + Math.random() * 0.38).toFixed(2));
+      timeData.push(randVal);
+      updateTimeData();
+    }
+
+    function resetTimeData() {
+      playClick();
+      timeData = [10.93, 10.95, 10.72, 10.99, 10.93, 10.68, 10.81];
+      updateTimeData();
+    }
+
+    function addTimeRow() {
+      playClick();
+      timeData.push(10.85);
+      updateTimeData();
+    }
+
+    function deleteTimeRow(idx) {
+      if (timeData.length <= 2) {
+        alert("Servono almeno 2 misure per il calcolo dell'errore!");
+        return;
+      }
+      playClick();
+      timeData.splice(idx, 1);
+      updateTimeData();
+    }
+
+    function editTimeValue(idx, val) {
+      const parsed = parseFloat(val.replace(',', '.'));
+      if (!isNaN(parsed) && parsed > 0) {
+        timeData[idx] = parsed;
+        updateTimeData();
+      }
+    }
+
+    function updateTimeData() {
+      const N = timeData.length;
+      const sum = timeData.reduce((a, b) => a + b, 0);
+      const rawMean = sum / N;
+      const mean = Math.round(rawMean * 100) / 100; // Centesimi
+      const minVal = Math.min(...timeData);
+      const maxVal = Math.max(...timeData);
+      const eaRaw = (maxVal - minVal) / 2;
+      const ea = Math.round(eaRaw * 100) / 100;
+      const er = ea / mean;
+      const ep = er * 100;
+
+      // Update Horizontal Table Body
+      const tbody = document.getElementById('time-table-horizontal-body');
+      let trHtml = '<tr><td class="p-2 font-bold text-slate-700 bg-sky-100">$T_i$ (s)</td>';
+      timeData.forEach((val, idx) => {
+        trHtml += `
+          <td class="p-1">
+            <input type="text" value="${val.toFixed(2).replace('.', ',')}" onchange="editTimeValue(${idx}, this.value)"
+                   class="w-16 text-center py-1 border rounded font-mono font-bold text-slate-900 focus:ring-2 focus:ring-orange-500 outline-none">
+          </td>
+        `;
+      });
+      trHtml += `
+        <td class="p-2">
+          <button onclick="deleteTimeRow(${timeData.length - 1})" class="text-red-600 hover:text-red-800 transition" title="Rimuovi ultima riga">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>`;
+      tbody.innerHTML = trHtml;
+
+      // Stats Badges
+      document.getElementById('stat-n').innerText = N;
+      document.getElementById('stat-mean').innerText = mean.toFixed(2).replace('.', ',') + ' s';
+      document.getElementById('stat-ea').innerText = ea.toFixed(2).replace('.', ',') + ' s';
+      document.getElementById('stat-ep').innerText = ep.toFixed(1).replace('.', ',') + ' %';
+      document.getElementById('val-min').innerText = minVal.toFixed(2).replace('.', ',') + ' s';
+      document.getElementById('val-max').innerText = maxVal.toFixed(2).replace('.', ',') + ' s';
+
+      /* ==========================================================================
+         MULTILINE LATEX CALCULATIONS (PREVENT OVERFLOW)
+         ========================================================================== */
+      
+      // Step 1: Multiline Sum and Raw Mean
+      const formattedTerms = timeData.map(v => v.toFixed(2).replace('.', ','));
+      let sumLines = [];
+      for (let i = 0; i < formattedTerms.length; i += 4) {
+        sumLines.push(formattedTerms.slice(i, i + 4).join(' + '));
+      }
+      const multilineSumLatex = sumLines.join(' \\\\ &\t\\quad + ');
+
+      document.getElementById('katex-step1-somma').innerHTML = `
+        $$\\begin{aligned}
+        \\text{Somma} &= ${multilineSumLatex} \\\\
+        &= ${sum.toFixed(2).replace('.', ',')}\\text{ s} \\\\[0.5em]
+        \\bar{T}_{\\text{grezzo}} &= \\frac{\\text{Somma}}{N} = \\frac{${sum.toFixed(2).replace('.', ',')}\\text{ s}}{${N}} = ${rawMean.toFixed(6).replace('.', ',')}...\\text{ s}
+        \\end{aligned}$$
+      `;
+
+      // Step 2: Rounding
+      document.getElementById('katex-step2-arrotondamento').innerHTML = `
+        $$\\begin{aligned}
+        \\bar{T}_{\\text{grezzo}} = ${rawMean.toFixed(4).replace('.', ',')}...\\text{ s} \\quad \\xrightarrow{\\text{arrotondamento ai centesimi}} \\quad \\mathbf{\\bar{T} = ${mean.toFixed(2).replace('.', ',')}\\text{ s}}
+        \\end{aligned}$$
+      `;
+
+      // Step 3: Absolute Error, Relative Error, Percentage Error
+      document.getElementById('katex-step3-ea').innerHTML = `
+        $$\\begin{aligned}
+        E_a &= \\frac{T_{\\text{max}} - T_{\\text{min}}}{2} \\\\
+        &= \\frac{${maxVal.toFixed(2).replace('.', ',')} - ${minVal.toFixed(2).replace('.', ',')}}{2} \\\\
+        &= \\frac{${(maxVal - minVal).toFixed(2).replace('.', ',')}}{2} = ${eaRaw.toFixed(3).replace('.', ',')}\\text{ s} \\\\
+        &\\implies \\mathbf{E_a = ${ea.toFixed(2).replace('.', ',')}\\text{ s}}
+        \\end{aligned}$$
+      `;
+
+      document.getElementById('katex-step3-er').innerHTML = `
+        $$\\begin{aligned}
+        E_r &= \\frac{E_a}{\\bar{T}} \\\\
+        &= \\frac{${ea.toFixed(2).replace('.', ',')}\\text{ s}}{${mean.toFixed(2).replace('.', ',')}\\text{ s}} \\\\
+        &\\approx \\mathbf{${er.toFixed(3).replace('.', ',')}}
+        \\end{aligned}$$
+      `;
+
+      document.getElementById('katex-step3-ep').innerHTML = `
+        $$\\begin{aligned}
+        E_{\\%} &= E_r \\times 100\\% \\\\
+        &= ${er.toFixed(3).replace('.', ',')} \\times 100\\% \\\\
+        &= \\mathbf{${ep.toFixed(1).replace('.', ',')}\\%}
+        \\end{aligned}$$
+      `;
+
+      // Step 4: Final Result
+      document.getElementById('katex-step4-risultato').innerHTML = `
+        $$T = (\\bar{T} \\pm E_a)\\text{ s} \\implies \\mathbf{T = (${mean.toFixed(2).replace('.', ',')} \\pm ${ea.toFixed(2).replace('.', ',')})\\text{ s}}$$
+      `;
+
+      renderKaTeX(document.getElementById('tab-tempo'));
+      drawTimePlot();
+    }
+
+    function drawTimePlot() {
+      const canvas = document.getElementById('timelineCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      const W = rect.width;
+      const H = rect.height;
+
+      ctx.clearRect(0, 0, W, H);
+
+      if (timeData.length === 0) return;
+
+      const minVal = Math.min(...timeData);
+      const maxVal = Math.max(...timeData);
+      const sum = timeData.reduce((a, b) => a + b, 0);
+      const mean = sum / timeData.length;
+      const ea = (maxVal - minVal) / 2;
+
+      const minAxis = Math.floor((minVal - 0.15) * 10) / 10;
+      const maxAxis = Math.ceil((maxVal + 0.15) * 10) / 10;
+
+      const getX = (val) => {
+        const margin = 45;
+        return margin + ((val - minAxis) / (maxAxis - minAxis)) * (W - 2 * margin);
+      };
+
+      const centerY = H / 2 + 8;
+
+      // Axis Line
+      ctx.beginPath();
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      ctx.moveTo(25, centerY);
+      ctx.lineTo(W - 25, centerY);
+      ctx.stroke();
+
+      // Axis Ticks
+      const step = 0.1;
+      for (let t = minAxis; t <= maxAxis + 0.01; t += step) {
+        const x = getX(t);
+        ctx.beginPath();
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1;
+        ctx.moveTo(x, centerY - 6);
+        ctx.lineTo(x, centerY + 6);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(t.toFixed(1).replace('.', ',') + 's', x, centerY + 20);
+      }
+
+      // Confidence Band Area [T_mean - Ea, T_mean + Ea]
+      const xBandLeft = getX(mean - ea);
+      const xBandRight = getX(mean + ea);
+      ctx.fillStyle = 'rgba(244, 128, 36, 0.2)';
+      ctx.fillRect(xBandLeft, centerY - 40, xBandRight - xBandLeft, 80);
+      ctx.strokeStyle = '#f48024';
+      ctx.setLineDash([4, 3]);
+      ctx.strokeRect(xBandLeft, centerY - 40, xBandRight - xBandLeft, 80);
+      ctx.setLineDash([]);
+
+      // Label Band
+      ctx.fillStyle = '#c25e0e';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Incertezza [${(mean-ea).toFixed(2).replace('.', ',')}s, ${(mean+ea).toFixed(2).replace('.', ',')}s]`, (xBandLeft + xBandRight)/2, centerY - 46);
+
+      // Mean Line
+      const xMean = getX(mean);
+      ctx.beginPath();
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 3;
+      ctx.moveTo(xMean, centerY - 48);
+      ctx.lineTo(xMean, centerY + 48);
+      ctx.stroke();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText(`Media = ${mean.toFixed(2).replace('.', ',')}s`, xMean, centerY - 54);
+
+      // Plot Data Points
+      timeData.forEach((val, i) => {
+        const x = getX(val);
+        const yOffset = ((i % 3) - 1) * 14;
+        
+        ctx.beginPath();
+        ctx.arc(x, centerY + yOffset, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#0284c7';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.fillText(`T${i+1}`, x, centerY + yOffset - 9);
+      });
+    }
+
+    /* ==========================================================================
+       3. TAB 2: METAFORA DEI GRAPPOLI D'UVA ("RACCOGLI E LIVELLA")
+       ========================================================================== */
+    let grapePhase = 1;
+    const grapeBunches = [11, 12, 9, 14, 11, 7, 13]; // Total = 77 grapes
+    const totalGrapes = grapeBunches.reduce((a, b) => a + b, 0); // 77
+    const meanGrapes = totalGrapes / grapeBunches.length; // 11
+
+    function setGrapePhase(phase) {
+      playClick();
+      grapePhase = phase;
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`gphase-btn-${i}`);
+        if (i === phase) {
+          btn.className = 'phet-btn-orange px-3 py-2 text-xs';
+        } else {
+          btn.className = 'phet-btn-blue px-3 py-2 text-xs';
+        }
+      }
+      drawGrapesPhase();
+      updateGrapeExplanation();
+    }
+
+    function updateGrapeExplanation() {
+      const box = document.getElementById('grape-explanation-box');
+      if (grapePhase === 1) {
+        box.innerHTML = `
+          <h3 class="font-bold text-purple-950 text-sm mb-2"><i class="fas fa-hand-holding-harvest text-orange-500 me-2"></i>FASE 1: Stacca e Raccogli tutti gli acini nel Cesto Unico</h3>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            Ogni grappolo d'uva ha un numero diverso di acini ($11, 12, 9, 14, 11, 7, 13$). Raccogliendoli tutti nello stesso cesto, calcoliamo la somma totale:
+          </p>
+          <div class="katex-container my-2 font-semibold text-purple-950">
+            $$\\text{Somma Totale} = \\sum N_i = 11 + 12 + 9 + 14 + 11 + 7 + 13 = 77\\text{ acini}$$
+          </div>
+        `;
+      } else if (grapePhase === 2) {
+        box.innerHTML = `
+          <h3 class="font-bold text-purple-950 text-sm mb-2"><i class="fas fa-balance-scale-right text-purple-700 me-2"></i>FASE 2: Distribuisci Equamente (Livellamento = MEDIA)</h3>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            Se ridistribuiamo i 77 acini totali in modo perfettamente equo nei 7 contenitori, ogni contenitore riceve esattamente lo stesso livello:
+          </p>
+          <div class="katex-container my-2 font-semibold text-purple-950">
+            $$\\text{Media } \\bar{N} = \\frac{\\text{Somma Totale}}{\\text{Numero Contenitori}} = \\frac{77}{7} = 11\\text{ acini per grappolo}$$
+          </div>
+          <p class="text-xs text-purple-900 font-bold">La MEDIA è il valore "livellato" che rappresenta l'intero gruppo!</p>
+        `;
+      } else if (grapePhase === 3) {
+        box.innerHTML = `
+          <h3 class="font-bold text-purple-950 text-sm mb-2"><i class="fas fa-arrows-alt-h text-amber-600 me-2"></i>FASE 3: Incertezza e Dispersione ($E_a$)</h3>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            Confrontiamo il grappolo reale più piccolo ($N_{\\text{min}} = 7$) e quello più grande ($N_{\\text{max}} = 14$) rispetto al valore medio ($11$).
+          </p>
+          <div class="katex-container my-2 font-semibold text-purple-950">
+            $$E_a = \\frac{N_{\\text{max}} - N_{\\text{min}}}{2} = \\frac{14 - 7}{2} = 3{,}5\\text{ acini}$$
+          </div>
+          <p class="text-xs text-slate-700">
+            L'Errore Assoluto misura quanto i singoli grappoli reali variano attorno alla media ($11 \\pm 3{,}5$ acini).
+          </p>
+        `;
+      } else if (grapePhase === 4) {
+        box.innerHTML = `
+          <h3 class="font-bold text-purple-950 text-sm mb-2"><i class="fas fa-search-plus text-emerald-700 me-2"></i>FASE 4: Perché usiamo l'Errore Relativo?</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <div class="p-3 bg-white rounded-xl border border-purple-200">
+              <strong class="text-xs text-red-600 block mb-1">Caso A: Piccolo Grappolo (10 acini)</strong>
+              <p class="text-xs">Perdere 1 acino su 10 pesa tantissimo!</p>
+              <div class="katex-container">$$E_r = \\frac{1}{10} = 0{,}10 = 10\\%$$</div>
+            </div>
+            <div class="p-3 bg-white rounded-xl border border-purple-200">
+              <strong class="text-xs text-emerald-700 block mb-1">Caso B: Cassetta Grande (100 acini)</strong>
+              <p class="text-xs">Perdere 1 acino su 100 è un difetto impercettibile!</p>
+              <div class="katex-container">$$E_r = \\frac{1}{100} = 0{,}01 = 1\\%$$</div>
+            </div>
+          </div>
+          <p class="text-xs text-purple-900 font-bold mt-2 text-center">
+            L'Errore Relativo $E_r = \\frac{E_a}{\\text{Valore}}$ esprime la qualità della misura a prescindere dall'unità!
+          </p>
+        `;
+      }
+      renderKaTeX(box);
+    }
+
+    function drawGrapesPhase() {
+      const canvas = document.getElementById('grapeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      const W = rect.width;
+      const H = rect.height;
+
+      ctx.clearRect(0, 0, W, H);
+
+      if (grapePhase === 1) {
+        const spacing = W / 8;
+        grapeBunches.forEach((count, i) => {
+          const cx = spacing * (i + 1);
+          const cy = 75;
+
+          // Vine line
+          ctx.beginPath();
+          ctx.strokeStyle = '#15803d';
+          ctx.lineWidth = 4;
+          ctx.moveTo(cx - 18, 25);
+          ctx.lineTo(cx + 18, 25);
+          ctx.stroke();
+
+          // Bunch stem
+          ctx.beginPath();
+          ctx.strokeStyle = '#166534';
+          ctx.lineWidth = 2;
+          ctx.moveTo(cx, 25);
+          ctx.lineTo(cx, cy - 20);
+          ctx.stroke();
+
+          drawGrapeCluster(ctx, cx, cy, count);
+
+          ctx.fillStyle = '#1e293b';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`Grappolo ${i+1}`, cx, cy + 45);
+          ctx.fillStyle = '#7e22ce';
+          ctx.fillText(`${count} acini`, cx, cy + 58);
+        });
+
+        // Basket at bottom center
+        ctx.fillStyle = '#b45309';
+        ctx.beginPath();
+        ctx.roundRect(W/2 - 90, H - 65, 180, 48, 12);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Cesto Totale: ${totalGrapes} acini`, W/2, H - 36);
+
+      } else if (grapePhase === 2) {
+        const spacing = W / 8;
+        const groundY = H - 35;
+        const maxBarH = 150;
+
+        grapeBunches.forEach((_, i) => {
+          const cx = spacing * (i + 1);
+          const barH = (meanGrapes / 16) * maxBarH;
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.strokeStyle = '#94a3b8';
+          ctx.lineWidth = 2;
+          ctx.fillRect(cx - 16, groundY - maxBarH, 32, maxBarH);
+          ctx.strokeRect(cx - 16, groundY - maxBarH, 32, maxBarH);
+
+          ctx.fillStyle = 'rgba(147, 51, 234, 0.75)';
+          ctx.fillRect(cx - 14, groundY - barH, 28, barH);
+
+          ctx.fillStyle = '#1e293b';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`Provetta ${i+1}`, cx, groundY + 16);
+          ctx.fillStyle = '#6b21a8';
+          ctx.fillText(`11 acini`, cx, groundY - barH - 6);
+        });
+
+        const levelY = groundY - (meanGrapes / 16) * maxBarH;
+        ctx.beginPath();
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 4]);
+        ctx.moveTo(spacing / 2, levelY);
+        ctx.lineTo(W - spacing / 2, levelY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`MEDIA = 11 acini`, 12, levelY - 8);
+
+      } else if (grapePhase === 3) {
+        const x1 = W * 0.25;
+        const x2 = W * 0.50;
+        const x3 = W * 0.75;
+        const groundY = H - 45;
+
+        drawCylinder(ctx, x1, groundY, 7, 'N_min = 7', '#0284c7');
+        drawCylinder(ctx, x2, groundY, 11, 'Media = 11', '#16a34a');
+        drawCylinder(ctx, x3, groundY, 14, 'N_max = 14', '#dc2626');
+
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x1, groundY - 170);
+        ctx.lineTo(x3, groundY - 170);
+        ctx.stroke();
+
+        ctx.fillStyle = '#b45309';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Dispersione: N_max - N_min = 14 - 7 = 7 acini`, W/2, groundY - 180);
+        ctx.fillText(`Incertezza Ea = 7 / 2 = 3.5 acini`, W/2, groundY - 155);
+
+      } else if (grapePhase === 4) {
+        const x1 = W * 0.3;
+        const x2 = W * 0.7;
+
+        ctx.fillStyle = '#fef2f2';
+        ctx.strokeStyle = '#fca5a5';
+        ctx.lineWidth = 2;
+        ctx.roundRect(x1 - 95, 35, 190, H - 60, 14);
+        ctx.fill(); ctx.stroke();
+
+        drawGrapeCluster(ctx, x1, 110, 9);
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Manca 1 acino su 10`, x1, H - 75);
+        ctx.fillText(`Errore Relativo = 10%`, x1, H - 50);
+
+        ctx.fillStyle = '#f0fdf4';
+        ctx.strokeStyle = '#86efac';
+        ctx.roundRect(x2 - 95, 35, 190, H - 60, 14);
+        ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = '#16a34a';
+        ctx.fillRect(x2 - 38, 85, 76, 55);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(`99 / 100 acini`, x2, 118);
+
+        ctx.fillStyle = '#16a34a';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(`Manca 1 acino su 100`, x2, H - 75);
+        ctx.fillText(`Errore Relativo = 1%`, x2, H - 50);
+      }
+    }
+
+    function drawGrapeCluster(ctx, cx, cy, count) {
+      const radius = 6.5;
+      let drawn = 0;
+      let rows = 4;
+      for (let r = 0; r < rows && drawn < count; r++) {
+        let cols = rows - r;
+        for (let c = 0; c < cols && drawn < count; c++) {
+          const x = cx + (c - (cols - 1) / 2) * (radius * 2);
+          const y = cy + r * (radius * 1.8);
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = '#8b5cf6';
+          ctx.fill();
+          ctx.strokeStyle = '#5b21b6';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          drawn++;
+        }
+      }
+    }
+
+    function drawCylinder(ctx, cx, groundY, count, label, color) {
+      const maxH = 135;
+      const h = (count / 16) * maxH;
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      ctx.fillRect(cx - 22, groundY - maxH, 44, maxH);
+      ctx.strokeRect(cx - 22, groundY - maxH, 44, maxH);
+
+      ctx.fillStyle = color;
+      ctx.fillRect(cx - 20, groundY - h, 40, h);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, cx, groundY + 18);
+    }
+
+    /* ==========================================================================
+       4. TAB 3: BILANCIA DIGITALE & ESERCIZIO ASSEGNATO (IL CHIODO)
+       ========================================================================== */
+    let nailMasses = [10.834, 10.951, 11.004, 10.987];
+    let activeSensitivity = 0.001;
+
+    function setSensitivity(sens) {
+      playClick();
+      activeSensitivity = sens;
+      
+      const buttons = [
+        { id: 'sens-btn-0001', val: 0.001 },
+        { id: 'sens-btn-001', val: 0.01 },
+        { id: 'sens-btn-01', val: 0.1 },
+        { id: 'sens-btn-1', val: 1.0 }
+      ];
+
+      buttons.forEach(b => {
+        const btnEl = document.getElementById(b.id);
+        if (b.val === sens) {
+          btnEl.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-orange-500 text-white shadow';
+        } else {
+          btnEl.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50';
+        }
+      });
+
+      updateNailCalculations();
+    }
+
+    function resetNailData() {
+      playClick();
+      nailMasses = [10.834, 10.951, 11.004, 10.987];
+      updateNailCalculations();
+    }
+
+    function addNailRow() {
+      playClick();
+      nailMasses.push(10.920);
+      updateNailCalculations();
+    }
+
+    function deleteNailRow(idx) {
+      if (nailMasses.length <= 2) {
+        alert("Servono almeno 2 misurazioni!");
+        return;
+      }
+      playClick();
+      nailMasses.splice(idx, 1);
+      updateNailCalculations();
+    }
+
+    function editNailRow(idx, val) {
+      const parsed = parseFloat(val.replace(',', '.'));
+      if (!isNaN(parsed) && parsed > 0) {
+        nailMasses[idx] = parsed;
+        updateNailCalculations();
+      }
+    }
+
+    function updateNailCalculations() {
+      const decimals = getDecimalPlaces(activeSensitivity);
+
+      // Re-render table
+      const tbody = document.getElementById('nail-table-body');
+      tbody.innerHTML = '';
+      nailMasses.forEach((m, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        tr.innerHTML = `
+          <td class="p-2 text-center font-bold text-slate-600">$m_{${idx+1}}$</td>
+          <td class="p-2">
+            <input type="text" value="${m.toFixed(decimals).replace('.', ',')}" 
+                   onchange="editNailRow(${idx}, this.value)"
+                   class="w-28 px-2 py-1 border rounded focus:ring-2 focus:ring-emerald-400 outline-none font-mono font-bold text-slate-800">
+          </td>
+          <td class="p-2 text-center">
+            <button onclick="deleteNailRow(${idx})" class="text-red-500 hover:text-red-700 transition">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const N = nailMasses.length;
+      const sum = nailMasses.reduce((a, b) => a + b, 0);
+      const rawMean = sum / N;
+      const minVal = Math.min(...nailMasses);
+      const maxVal = Math.max(...nailMasses);
+      
+      const roundedMean = roundTo(rawMean, decimals);
+
+      const semidiff = (maxVal - minVal) / 2;
+      const ea = Math.max(semidiff, activeSensitivity);
+      const eaRounded = roundTo(ea, decimals);
+
+      const er = eaRounded / roundedMean;
+      const ep = er * 100;
+
+      const outputBox = document.getElementById('sandbox-calc-output');
+      outputBox.innerHTML = `
+        <div class="p-3 bg-white rounded-lg border border-slate-200">
+          <strong class="text-xs text-slate-500 block mb-1">1. Somma e Media Grezza:</strong>
+          <div class="katex-container">$$\\sum m_i = ${sum.toFixed(decimals).replace('.', ',')}\\text{ g} \\implies \\bar{m}_{\\text{grezzo}} = \\frac{${sum.toFixed(decimals).replace('.', ',')}}{${N}} = ${rawMean.toFixed(6).replace('.', ',')}...\\text{ g}$$</div>
+        </div>
+
+        <div class="p-3 bg-white rounded-lg border border-slate-200">
+          <strong class="text-xs text-slate-500 block mb-1">2. Media Arrotondata (Sensibilità ${activeSensitivity.toString().replace('.', ',')}g):</strong>
+          <div class="katex-container">$$\\bar{m} = ${roundedMean.toFixed(decimals).replace('.', ',')}\\text{ g}$$</div>
+        </div>
+
+        <div class="p-3 bg-white rounded-lg border border-slate-200">
+          <strong class="text-xs text-slate-500 block mb-1">3. Errore Assoluto $E_a$ (Incertezza):</strong>
+          <div class="katex-container">$$E_a = \\frac{m_{\\text{max}} - m_{\\text{min}}}{2} = \\frac{${maxVal.toFixed(decimals).replace('.', ',')} - ${minVal.toFixed(decimals).replace('.', ',')}}{2} = ${semidiff.toFixed(decimals).replace('.', ',')}\\text{ g}$$</div>
+        </div>
+
+        <div class="p-3 bg-white rounded-lg border border-slate-200">
+          <strong class="text-xs text-slate-500 block mb-1">4. Errore Relativo ($E_r$) ed Errore Percentuale ($E_\\%$):</strong>
+          <div class="katex-container">$$E_r = \\frac{${eaRounded.toFixed(decimals).replace('.', ',')}}{${roundedMean.toFixed(decimals).replace('.', ',')}} \\approx ${er.toFixed(4).replace('.', ',')} \\implies E_{\\%} = ${ep.toFixed(2).replace('.', ',')}\\%$$</div>
+        </div>
+
+        <div class="p-4 bg-emerald-100 rounded-lg border border-emerald-300 text-center">
+          <strong class="text-xs text-emerald-950 block mb-1">5. Scrittura Finale del Risultato:</strong>
+          <div class="katex-container">$$m = (${roundedMean.toFixed(decimals).replace('.', ',')} \\pm ${eaRounded.toFixed(decimals).replace('.', ',')})\\text{ g}$$</div>
+        </div>
+      `;
+
+      renderKaTeX(document.getElementById('tab-bilancia'));
+    }
+
+    function getDecimalPlaces(num) {
+      if (num >= 1) return 0;
+      if (num === 0.1) return 1;
+      if (num === 0.01) return 2;
+      return 3;
+    }
+
+    function roundTo(val, dec) {
+      const factor = Math.pow(10, dec);
+      return Math.round(val * factor) / factor;
+    }
+
+    function toggleAccordion() {
+      const content = document.getElementById('accordion-content');
+      const icon = document.getElementById('accordion-icon');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.className = 'fas fa-chevron-up';
+        renderKaTeX(content);
+      } else {
+        content.classList.add('hidden');
+        icon.className = 'fas fa-chevron-down';
+      }
+    }
+
+    /* ==========================================================================
+       5. TAB 4: QUIZ INTERATTIVO DI AUTOVALUTAZIONE
+       ========================================================================== */
+    const quizQuestions = [
+      {
+        q: "Qual è la formula corretta dell'Errore Assoluto ($E_a$) o Semidispersione Massima?",
+        options: [
+          "$$E_a = T_{\\text{max}} - T_{\\text{min}}$$",
+          "$$E_a = \\frac{T_{\\text{max}} - T_{\\text{min}}}{2}$$",
+          "$$E_a = \\frac{\\sum T_i}{N}$$",
+          "$$E_a = \\bar{T} \\times 100$$"
+        ],
+        correct: 1,
+        exp: "L'errore assoluto in una serie di misure equivale alla metà della differenza tra il valore massimo e il valore minimo misurato ($E_a = \\frac{T_{\\text{max}} - T_{\\text{min}}}{2}$)."
+      },
+      {
+        q: "Se la media calcolata è $\\bar{T} = 10{,}86\\text{ s}$ e l'errore assoluto è $E_a = 0{,}16\\text{ s}$, a quanto ammonta l'Errore Percentuale $E_\\%$?",
+        options: [
+          "$$E_\\% \\approx 0{,}015\\%$$",
+          "$$E_\\% \\approx 1{,}5\\%$$",
+          "$$E_\\% \\approx 15\\%$$",
+          "$$E_\\% \\approx 0{,}16\\%$$"
+        ],
+        correct: 1,
+        exp: "$$E_r = \\frac{0{,}16}{10{,}86} \\approx 0{,}0147 \\implies E_\\% = 0{,}0147 \\times 100\\% \\approx 1{,}5\\%$$"
+      },
+      {
+        q: "Perché l'Errore Relativo $E_r = \\frac{E_a}{\\bar{X}}$ viene definito come 'numero puro'?",
+        options: [
+          "Perché si misura sempre in secondi.",
+          "Perché è il rapporto tra due grandezze con la stessa unità di misura, le quali si semplificano.",
+          "Perché l'errore assoluto è sempre uguale a zero.",
+          "Perché si calcola solo quando la media è 1."
+        ],
+        correct: 1,
+        exp: "Rapportando due valori espressi nella stessa unità di misura (es. $\\text{s}/\\text{s}$ oppure $\\text{g}/\\text{g}$), le unità di misura si elidono lasciando un numero adimensionale."
+      },
+      {
+        q: "Se la bilancia ha sensibilità al milligrammo ($0{,}001\\text{ g}$), quanti decimali dobbiamo conservare nel valore medio arrotondato?",
+        options: [
+          "Nessun decimale",
+          "1 decimale",
+          "2 decimali",
+          "3 decimali"
+        ],
+        correct: 3,
+        exp: "L'arrotondamento del valore medio deve sempre coincidere con le cifre decimali apprezzabili dallo strumento di misura (in questo caso 3 decimali)."
+      },
+      {
+        q: "Cosa rappresenta fisicamente la MEDIA ARITMETICA di una serie di misure della stessa grandezza?",
+        options: [
+          "Il valore massimo assoluto misurabile.",
+          "La stima più affidabile del valore vero della grandezza.",
+          "La misura del solo primo studente.",
+          "L'errore sistematico della bilancia."
+        ],
+        correct: 1,
+        exp: "La media aritmetica riduce l'impatto degli errori casuali e costituisce la stima più probabile del valore vero."
+      }
+    ];
+
+    let userAnswers = Array(quizQuestions.length).fill(null);
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+
+      quizQuestions.forEach((qObj, qIdx) => {
+        const qCard = document.createElement('div');
+        qCard.className = 'p-5 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3';
+        
+        let optionsHtml = '';
+        qObj.options.forEach((opt, optIdx) => {
+          let btnStyle = 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-800';
+          if (userAnswers[qIdx] !== null) {
+            if (optIdx === qObj.correct) {
+              btnStyle = 'bg-emerald-100 border-emerald-400 text-emerald-950 font-bold';
+            } else if (userAnswers[qIdx] === optIdx) {
+              btnStyle = 'bg-red-100 border-red-400 text-red-950 font-bold';
+            }
+          }
+
+          optionsHtml += `
+            <button onclick="answerQuiz(${qIdx}, ${optIdx})" 
+                    ${userAnswers[qIdx] !== null ? 'disabled' : ''}
+                    class="w-full text-left p-3 rounded-lg border text-sm transition flex items-center justify-between ${btnStyle}">
+              <div class="katex-container">${opt}</div>
+              ${userAnswers[qIdx] !== null && optIdx === qObj.correct ? '<i class="fas fa-check-circle text-emerald-600 text-lg ms-2"></i>' : ''}
+              ${userAnswers[qIdx] !== null && userAnswers[qIdx] === optIdx && optIdx !== qObj.correct ? '<i class="fas fa-times-circle text-red-600 text-lg ms-2"></i>' : ''}
+            </button>
+          `;
+        });
+
+        let expHtml = '';
+        if (userAnswers[qIdx] !== null) {
+          expHtml = `
+            <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-950">
+              <strong><i class="fas fa-info-circle me-1"></i>Spiegazione:</strong> ${qObj.exp}
+            </div>
+          `;
+        }
+
+        qCard.innerHTML = `
+          <h3 class="font-bold text-slate-800 text-sm">
+            <span class="bg-orange-500 text-white px-2 py-0.5 rounded me-2">Q${qIdx + 1}</span>
+            ${qObj.q}
+          </h3>
+          <div class="space-y-2 mt-2">
+            ${optionsHtml}
+          </div>
+          ${expHtml}
+        `;
+
+        container.appendChild(qCard);
+      });
+
+      const score = userAnswers.reduce((acc, ans, idx) => {
+        return ans === quizQuestions[idx].correct ? acc + 1 : acc;
+      }, 0);
+
+      document.getElementById('quiz-score').innerText = score;
+
+      renderKaTeX(container);
+    }
+
+    function answerQuiz(qIdx, optIdx) {
+      if (userAnswers[qIdx] !== null) return;
+      userAnswers[qIdx] = optIdx;
+
+      if (optIdx === quizQuestions[qIdx].correct) {
+        playSuccess();
+      } else {
+        playWrong();
+      }
+
+      renderQuiz();
+    }
+
+    function restartQuiz() {
+      playClick();
+      userAnswers = Array(quizQuestions.length).fill(null);
+      renderQuiz();
+    }
+
+    /* ==========================================================================
+       6. INITIALIZATION ON WINDOW LOAD
+       ========================================================================== */
+    window.onload = function() {
+      updateTimeData();
+      updateNailCalculations();
+      renderQuiz();
+
+      setTimeout(() => renderKaTeX(), 150);
+
+      window.addEventListener('resize', () => {
+        drawTimePlot();
+        drawGrapesPhase();
+      });
+    };
+  </script>
+</body>
+</html>
